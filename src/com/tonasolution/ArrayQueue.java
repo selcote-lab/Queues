@@ -16,14 +16,28 @@ public class ArrayQueue {
 
     public void add(Employee employee) {
 
-        if (back >  queue.length) {
+        if (size() == queue.length - 1 ) {
 
-            Employee[] newQueue = new Employee[back * 2];
-            System.arraycopy(queue, 0, newQueue, 0, back);
+            int numItems = size();
+            Employee[] newQueue = new Employee[queue.length * 2];
+
+            System.arraycopy(queue, front, newQueue, 0, queue.length - front);
+            System.arraycopy(queue, 0, newQueue, queue.length - front, back);
+
             queue = newQueue;
+            front = 0;
+            back = numItems;
         }
 
-        queue[back++] = employee;
+        queue[back] = employee;
+
+        if (back < queue.length - 1) {
+            back++;
+        }
+        else {
+            back = 0;
+        }
+
     }
 
     public Employee remove(){
@@ -40,6 +54,9 @@ public class ArrayQueue {
             front = 0;
             back  = 0;
         }
+        else if (front == queue.length) {
+            front = 0;
+        }
 
         return removedEmployee;
     }
@@ -54,13 +71,30 @@ public class ArrayQueue {
     }
 
     public void print() {
-
-        for (int i = front; i < back; i++) {
-            System.out.println(queue[i]);
+        if (front <= back) {
+            for (int i = front; i < back; i++) {
+                System.out.println(queue[i]);
+            }
         }
+        else {
+            for (int i = front; i < queue.length; i++ ) {
+                System.out.println(queue[i]);
+            }
+            for (int i = 0; i < back; i++ ) {
+                System.out.println(queue[i]);
+            }
+        }
+
     }
 
     public int size(){
-        return back - front;
+
+        if (front <= back) {
+            return back - front;
+        }
+        else {
+            return back - front + queue.length;
+        }
+
     }
 }
